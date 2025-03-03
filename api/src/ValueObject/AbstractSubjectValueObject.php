@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\ValueObject;
 
-readonly class AbstractSubjectValueObject
+abstract readonly class AbstractSubjectValueObject
 {
     public function __construct(
-        private string $description
+        private ?string $description = null,
     ) {
 
     }
