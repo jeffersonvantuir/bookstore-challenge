@@ -17,3 +17,14 @@ Para agilizar o processo de criação das entidades, foi utilizado o bundle Make
 composer require --dev symfony/maker-bundle
 composer require orm
 ```
+
+Para geração das entidades, foi utilizado o comando do symfony `bin/console make:entity`, porém, foi necessário posteriormente fazer os ajustes dos nomes das colunas nas entidades geradas.
+
+Após a definição das entidades, foi utilizado o comando do doctrine para geração das migrations `bin/console doctrine:migration:diff` e `bin/console doctrine:migration:migrate`.
+
+### Paginação
+
+Para realizar a paginação foi utilizado o componente Knp Paginator.
+```bash
+composer require knplabs/knp-paginator-bundle
+```
