@@ -29,6 +29,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
     intl \
     pdo_pgsql \
     xsl \
+    xdebug \
     zip && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && ln -s $(composer config --global home) /root/composer && \
