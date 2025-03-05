@@ -22,7 +22,6 @@ class AuthorController extends AbstractController
     public function __construct(
         private readonly AuthorService $authorService,
     ) {
-
     }
 
     #[Route('', name: '_list', methods: [Request::METHOD_GET])]
@@ -47,7 +46,7 @@ class AuthorController extends AbstractController
                     'page' => $pagination->getCurrentPageNumber(),
                     'limit' => $pagination->getItemNumberPerPage(),
                     'total' => $pagination->getTotalItemCount(),
-                    'pages' => $pagination->getPageCount(),
+                    'pages' => ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage()),
                 ]
             ]
         );

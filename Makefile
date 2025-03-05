@@ -14,6 +14,9 @@ dev:
 	@$(DOCKER_COMP) down
 	@$(DOCKER_COMP) up -d
 
-
 php-bash:
 	@$(PHP_CONT) bash
+
+lint:
+	@$(PHP_CONT) ./vendor/bin/phpstan
+	@$(PHP_CONT) ./vendor/bin/phpcs

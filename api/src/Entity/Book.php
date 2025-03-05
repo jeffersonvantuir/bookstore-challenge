@@ -25,15 +25,32 @@ class Book
     #[ORM\Column(name: 'Edicao', options: ['unsigned' => true, 'comment' => 'Edição do livro'])]
     private int $edition;
 
-    #[ORM\Column(name: 'AnoPublicacao', length: 4, options: ['unsigned' => true, 'comment' => 'Ano de Publicação do livro'])]
+    #[ORM\Column(
+        name: 'AnoPublicacao',
+        length: 4,
+        options: ['unsigned' => true, 'comment' => 'Ano de Publicação do livro']
+    )]
     private string $publicationYear;
 
-    #[ORM\Column(name: 'Valor', type: 'decimal', precision: 10, scale: 2, options: ['comment' => 'Valor (R$) do livro'])]
+    #[ORM\Column(
+        name: 'Valor',
+        type: 'decimal',
+        precision: 10,
+        scale: 2,
+        options: ['comment' => 'Valor (R$) do livro']
+    )]
     private float $amount;
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getTitle(): string

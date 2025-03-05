@@ -22,7 +22,6 @@ class SubjectController extends AbstractController
     public function __construct(
         private readonly SubjectService $subjectService,
     ) {
-
     }
 
     #[Route('', name: '_list', methods: [Request::METHOD_GET])]
@@ -48,7 +47,7 @@ class SubjectController extends AbstractController
                     'page' => $pagination->getCurrentPageNumber(),
                     'limit' => $pagination->getItemNumberPerPage(),
                     'total' => $pagination->getTotalItemCount(),
-                    'pages' => $pagination->getPageCount(),
+                    'pages' => ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage()),
                 ]
             ]
         );

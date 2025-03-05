@@ -28,3 +28,12 @@ Para realizar a paginação foi utilizado o componente Knp Paginator.
 ```bash
 composer require knplabs/knp-paginator-bundle
 ```
+
+### PHP Unit e PHP Stan
+Utilizado PHP Unit para realização dos testes unitários e PHP Stan para análise estática de código.
+
+```bash
+composer require --dev symfony/test-pack
+composer require phpstan/phpstan
+composer require squizlabs/php_codesniffer
+```
