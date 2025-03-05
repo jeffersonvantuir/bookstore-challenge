@@ -37,3 +37,9 @@ composer require --dev symfony/test-pack
 composer require phpstan/phpstan
 composer require squizlabs/php_codesniffer
 ```
+### Validações
+Algumas validações foram feitas de forma manual via PHP, utilizando `empty` e `strlen`. Porém, nas validações dos campos referente ao Livro (`AbstractBookValueObject`), utilizei o `Validator` do próprio Symfony para deixar o código mais legível.
+
+```bash
+composer require symfony/validator
+```

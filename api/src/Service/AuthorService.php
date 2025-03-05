@@ -15,7 +15,8 @@ use Doctrine\ORM\EntityManagerInterface;
 readonly class AuthorService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private AuthorRepository $authorRepository,
     ) {
     }
 
@@ -24,11 +25,7 @@ readonly class AuthorService
      */
     public function list(AuthorFilterDto $filterDto): array
     {
-        /** @var AuthorRepository $repository */
-        $repository = $this->entityManager
-            ->getRepository(Author::class);
-
-        return $repository
+        return $this->authorRepository
             ->findByFilterDto($filterDto);
     }
 
@@ -69,9 +66,9 @@ readonly class AuthorService
         $this->entityManager->flush();
     }
 
-    private function getEntity(int $id): Author
+    public function getEntity(int $id): Author
     {
-        $author = $this->entityManager->getRepository(Author::class)->find($id);
+        $author = $this->authorRepository->find($id);
         if (null === $author) {
             throw new \DomainException(sprintf('Autor não encontrado com ID %d', $id));
         }
