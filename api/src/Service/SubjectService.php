@@ -12,7 +12,7 @@ use App\ValueObject\SubjectCreateValueObject;
 use App\ValueObject\SubjectUpdateValueObject;
 use Doctrine\ORM\EntityManagerInterface;
 
-readonly class SubjectService
+class SubjectService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
