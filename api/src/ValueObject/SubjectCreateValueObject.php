@@ -6,5 +6,4 @@ namespace App\ValueObject;
 
 readonly class SubjectCreateValueObject extends AbstractSubjectValueObject
 {
-
 }

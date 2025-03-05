@@ -9,7 +9,6 @@ readonly class SubjectFilterDto
     public function __construct(
         private ?string $description = null,
     ) {
-
     }
 
     public function getDescription(): ?string
