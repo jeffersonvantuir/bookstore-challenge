@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Dto\Filter;
 
+/**
+ * @codeCoverageIgnore
+ */
 readonly class SubjectFilterDto
 {
     public function __construct(

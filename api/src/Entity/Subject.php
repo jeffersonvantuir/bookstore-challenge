@@ -7,6 +7,9 @@ namespace App\Entity;
 use App\Repository\SubjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @codeCoverageIgnore
+ */
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
 #[ORM\Table(name: 'Assunto')]
 class Subject

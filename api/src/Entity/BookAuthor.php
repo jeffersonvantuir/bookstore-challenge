@@ -7,6 +7,9 @@ namespace App\Entity;
 use App\Repository\BookAuthorRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @codeCoverageIgnore
+ */
 #[ORM\Entity(repositoryClass: BookAuthorRepository::class)]
 #[ORM\Table(name: 'Livro_Autor')]
 #[ORM\Index(name: 'Livro_Autor_FKIndex1', columns: ['Livro_Codl'])]

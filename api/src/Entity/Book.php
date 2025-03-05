@@ -7,6 +7,9 @@ namespace App\Entity;
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @codeCoverageIgnore
+ */
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ORM\Table(name: 'Livro')]
 class Book
