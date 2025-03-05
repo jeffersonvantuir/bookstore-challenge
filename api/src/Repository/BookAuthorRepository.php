@@ -17,4 +17,25 @@ class BookAuthorRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, BookAuthor::class);
     }
+
+    /**
+     * @param int[]|null $authorIds
+     */
+    public function removeLinkNotInAuthorsIds(int $bookId, ?array $authorIds = []): void
+    {
+        $queryBuilder = $this->createQueryBuilder('bookAuthor');
+
+        $queryBuilder->delete()
+            ->where('bookAuthor.book = :book')
+            ->setParameter('book', $bookId);
+
+        if (false === empty($authorIds)) {
+            $queryBuilder
+                ->andWhere('bookAuthor.author NOT IN (:authors)')
+                ->setParameter('authors', $authorIds);
+        }
+
+        $queryBuilder->getQuery()
+            ->execute();
+    }
 }

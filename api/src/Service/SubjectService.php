@@ -15,7 +15,8 @@ use Doctrine\ORM\EntityManagerInterface;
 readonly class SubjectService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private SubjectRepository $subjectRepository,
     ) {
     }
 
@@ -24,11 +25,7 @@ readonly class SubjectService
      */
     public function list(SubjectFilterDto $filterDto): array
     {
-        /** @var SubjectRepository $repository */
-        $repository = $this->entityManager
-            ->getRepository(Subject::class);
-
-        return $repository
+        return $this->subjectRepository
             ->findByFilterDto($filterDto);
     }
 
@@ -83,20 +80,20 @@ readonly class SubjectService
         $this->entityManager->flush();
     }
 
-    private function getSubjectByDescription(string $description): ?Subject
+    public function getEntity(int $id): Subject
     {
-        return $this->entityManager->getRepository(Subject::class)->findOneBy(
-            ['description' => $description],
-        );
-    }
-
-    private function getEntity(int $id): Subject
-    {
-        $subject = $this->entityManager->getRepository(Subject::class)->find($id);
+        $subject = $this->subjectRepository->find($id);
         if (null === $subject) {
             throw new \DomainException(sprintf('Assunto não encontrado com ID %d', $id));
         }
 
         return $subject;
+    }
+
+    private function getSubjectByDescription(string $description): ?Subject
+    {
+        return $this->subjectRepository->findOneBy(
+            ['description' => $description],
+        );
     }
 }
