@@ -222,7 +222,7 @@ class BookServiceTest extends TestCase
             '[title] Título é obrigatório. [amount] Valor do livro é obrigatório. ' .
             '[publisher] Editora é obrigatória. [edition] Edição é obrigatória. [publicationYear] O Ano da ' .
             'Publicação é obrigatória. [authorsIds] Os autores precisam ser informados. [authorsIds] O livro deve ' .
-            'estar vinculado a pelo menos 1 autor. [subjectsIds] Os assuntos precisam ser informados. '.
+            'estar vinculado a pelo menos 1 autor. [subjectsIds] Os assuntos precisam ser informados. ' .
             '[subjectsIds] O livro deve estar vinculado a pelo menos 1 assunto.'
         );
 
