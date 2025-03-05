@@ -9,7 +9,7 @@ use App\Entity\BookAuthor;
 use App\Repository\BookAuthorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-readonly class BookAuthorService
+class BookAuthorService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
