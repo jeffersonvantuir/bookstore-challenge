@@ -20,6 +20,9 @@ class AuthorRepository extends ServiceEntityRepository
         parent::__construct($registry, Author::class);
     }
 
+    /**
+     * @return array<int, array<string, string>>
+     */
     public function findByFilterDto(AuthorFilterDto $filterDto): array
     {
         $queryBuilder = $this->createQueryBuilder('author');

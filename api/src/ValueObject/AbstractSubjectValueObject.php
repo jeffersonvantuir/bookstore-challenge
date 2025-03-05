@@ -9,7 +9,6 @@ abstract readonly class AbstractSubjectValueObject
     public function __construct(
         private ?string $description = null,
     ) {
-
     }
 
     public function getDescription(): string

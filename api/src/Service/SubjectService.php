@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Dto\Filter\SubjectFilterDto;
 use App\Entity\BookSubject;
 use App\Entity\Subject;
+use App\Repository\SubjectRepository;
 use App\ValueObject\SubjectCreateValueObject;
 use App\ValueObject\SubjectUpdateValueObject;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,12 +16,19 @@ readonly class SubjectService
 {
     public function __construct(
         private EntityManagerInterface $entityManager
-    ) {}
+    ) {
+    }
 
+    /**
+     * @return array<int, array<string, string>>
+     */
     public function list(SubjectFilterDto $filterDto): array
     {
-        return $this->entityManager
-            ->getRepository(Subject::class)
+        /** @var SubjectRepository $repository */
+        $repository = $this->entityManager
+            ->getRepository(Subject::class);
+
+        return $repository
             ->findByFilterDto($filterDto);
     }
 

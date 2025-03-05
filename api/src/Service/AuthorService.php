@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Dto\Filter\AuthorFilterDto;
 use App\Entity\Author;
 use App\Entity\BookAuthor;
+use App\Repository\AuthorRepository;
 use App\ValueObject\AuthorCreateValueObject;
 use App\ValueObject\AuthorUpdateValueObject;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,12 +16,19 @@ readonly class AuthorService
 {
     public function __construct(
         private EntityManagerInterface $entityManager
-    ) {}
+    ) {
+    }
 
+    /**
+     * @return array<int, array<string, string>>
+     */
     public function list(AuthorFilterDto $filterDto): array
     {
-        return $this->entityManager
-            ->getRepository(Author::class)
+        /** @var AuthorRepository $repository */
+        $repository = $this->entityManager
+            ->getRepository(Author::class);
+
+        return $repository
             ->findByFilterDto($filterDto);
     }
 

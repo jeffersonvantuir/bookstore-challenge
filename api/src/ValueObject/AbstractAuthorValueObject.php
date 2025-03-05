@@ -9,7 +9,6 @@ abstract readonly class AbstractAuthorValueObject
     public function __construct(
         private ?string $name = null,
     ) {
-
     }
 
     public function getName(): string
