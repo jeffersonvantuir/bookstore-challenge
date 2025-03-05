@@ -93,7 +93,8 @@ readonly class BookService
 
     private function getEntity(int $id): Book
     {
-        $book = $this->entityManager->getRepository(Book::class)->find($id);
+        $book = $this->bookRepository->find($id);
+
         if (null === $book) {
             throw new \DomainException(sprintf('Livro não encontrado com ID %d', $id));
         }

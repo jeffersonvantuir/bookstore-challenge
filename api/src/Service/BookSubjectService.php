@@ -9,7 +9,7 @@ use App\Entity\BookSubject;
 use App\Repository\BookSubjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-readonly class BookSubjectService
+class BookSubjectService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

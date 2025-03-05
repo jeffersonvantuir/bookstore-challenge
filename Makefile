@@ -20,3 +20,9 @@ php-bash:
 lint:
 	@$(PHP_CONT) ./vendor/bin/phpstan
 	@$(PHP_CONT) ./vendor/bin/phpcs
+
+test:
+	@$(PHP_CONT) ./vendor/bin/phpunit
+
+test-cov:
+	@$(DOCKER_COMP) exec -e XDEBUG_MODE=coverage bookstore_php vendor/bin/phpunit --coverage-html coverage/html

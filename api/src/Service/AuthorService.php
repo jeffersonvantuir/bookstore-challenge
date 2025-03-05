@@ -12,7 +12,7 @@ use App\ValueObject\AuthorCreateValueObject;
 use App\ValueObject\AuthorUpdateValueObject;
 use Doctrine\ORM\EntityManagerInterface;
 
-readonly class AuthorService
+class AuthorService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

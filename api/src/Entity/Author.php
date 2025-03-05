@@ -7,6 +7,9 @@ namespace App\Entity;
 use App\Repository\AuthorRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @codeCoverageIgnore
+ */
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 #[ORM\Table(name: 'Autor')]
 class Author
