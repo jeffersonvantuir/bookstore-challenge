@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/book', name:'api_book')]
 class BookController extends AbstractController
 {
+    use EmptyContentValidatorTrait;
+
     public function __construct(
         private readonly BookService $bookService,
         private readonly EntityManagerInterface $entityManager,
@@ -83,9 +85,7 @@ class BookController extends AbstractController
     ): JsonResponse {
         try {
             $this->entityManager->beginTransaction();
-            if ('' === $request->getContent()) {
-                throw new BadRequestHttpException('Nenhum dado foi enviado na requisição.');
-            }
+            $this->validateRequest($request);
 
             $data = $request->toArray();
 
@@ -123,10 +123,7 @@ class BookController extends AbstractController
     ): JsonResponse {
         try {
             $this->entityManager->beginTransaction();
-
-            if ('' === $request->getContent()) {
-                throw new BadRequestHttpException('Nenhum dado foi enviado na requisição.');
-            }
+            $this->validateRequest($request);
 
             $data = $request->toArray();
 
