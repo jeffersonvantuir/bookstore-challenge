@@ -1,4 +1,14 @@
 services:
+  bookstore_nginx_frontend:
+    container_name: bookstore_nginx_frontend
+    image: nginx:alpine
+    volumes:
+      - './docker/nginx/vhost.conf:/etc/nginx/conf.d/default.conf'
+      - ./api/public:/app/public
+    ports:
+      - "${NGINX_PORT:-80}:80"
+    links:
+      - bookstore_php
   bookstore_nginx:
     container_name: bookstore_nginx
     depends_on:
