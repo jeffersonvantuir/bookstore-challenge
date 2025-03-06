@@ -39,3 +39,21 @@ subjects_edit:
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
         template: 'subjects/edit.html.twig'
+
+books:
+    path: /books
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'books/index.html.twig'
+
+books_new:
+    path: /books/new
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'books/new.html.twig'
+
+books_edit:
+    path: /books/edit
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'books/edit.html.twig'

@@ -53,13 +53,13 @@
                             callback(formattedData);
                         },
                         error: function (error) {
-                            console.error("Erro ao carregar os autores:", error);
+                            console.error("Erro ao carregar os assuntos: ", error);
                         }
                     });
                 },
                 processing: true,
                 serverSide: true,
-                lengthMenu: [[5, 10, 25, 50, 100], [2, 10, 25, 50, 100]],
+                lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
                 columns: [
                     { data: 'id', title: 'ID' },
                     { data: 'description', title: 'Descrição' },

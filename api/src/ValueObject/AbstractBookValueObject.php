@@ -111,8 +111,8 @@ abstract readonly class AbstractBookValueObject
                     new Assert\Count(['min' => 1], minMessage: 'O livro deve estar vinculado a pelo menos 1 autor.'),
                     new Assert\Type('array', 'O livro deve ser um array de IDs.'),
                     new Assert\All([
-                        new Assert\Type('int', 'O ID do assunto deve ser um número inteiro.'),
-                        new Assert\Positive(message: 'O ID do assunto deve ser um número positivo.'),
+                        new Assert\Type('int', 'O ID do autor deve ser um número inteiro.'),
+                        new Assert\Positive(message: 'O ID do autor deve ser um número positivo.'),
                     ])
                 ],
                 'subjectsIds' => [

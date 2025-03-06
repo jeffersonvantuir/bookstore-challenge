@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cadastrar Livro{% endblock %}
+
+{% block extrajs %}
+    <script src="{{ asset('js/jquery.mask.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <h2>Cadastrar Livro</h2>
+
+    <div id="message"></div>
+
+    <form id="book-form" action="" method="post">
+        <div class="row">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input type="text" maxlength="40" name="title" class="form-control" id="title">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-sm-12 col-md-6">
+                <label for="publisher" class="form-label">Editora</label>
+                <input type="text" maxlength="40" name="publisher" class="form-control" id="publisher">
+            </div>
+
+            <div class="mb-3 col-sm-12 col-md-6">
+                <label for="edition" class="form-label">Edição</label>
+                <input type="number" data-type="number" min="1" name="edition" class="form-control" id="edition">
+            </div>
+
+            <div class="mb-3 col-sm-12 col-md-6">
+                <label for="publicationYear" class="form-label">Ano de Publicação</label>
+                <input type="number" class="form-control" name="publicationYear" id="publicationYear">
+            </div>
+
+            <div class="mb-3 col-sm-12 col-md-6">
+                <label for="amount" class="form-label">Valor</label>
+                <div class="input-group">
+                    <div class="input-group-text">R$</div>
+                    <input type="text" data-type="float" class="form-control" name="amount" id="amount">
+                </div>
+            </div>
+
+            <div class="mb-3 col-sm-12 col-md-6">
+                <label for="authorsIds" class="form-label">Autores</label>
+                <select data-type="number" class="form-select" id="authorsIds" multiple name="authorsIds">
+                </select>
+            </div>
+
+            <div class="mb-3 col-sm-12 col-md-6">
+                <label for="subjectsIds" class="form-label">Assuntos</label>
+                <select data-type="number" class="form-select" id="subjectsIds" multiple name="subjectsIds">
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+                url: '/api/author/',
+                type: "GET",
+                success: function (response) {
+                    var authorsHtml = '';
+                    $.each(response.data, function (key, value) {
+                        authorsHtml += `<option value="${value.id}">${value.name}</option>`;
+                    });
+
+                    $('#authorsIds').empty().append(authorsHtml);
+                },
+                error: function (xhr) {
+                }
+            });
+
+            $.ajax({
+                url: '/api/subject/',
+                type: "GET",
+                success: function (response) {
+                    var subjectsHtml = '';
+                    $.each(response.data, function (key, value) {
+                        subjectsHtml += `<option value="${value.id}">${value.description}</option>`;
+                    });
+
+                    $('#subjectsIds').empty().append(subjectsHtml);
+                },
+                error: function (xhr) {
+                }
+            });
+
+            $('#publicationYear').mask('0000');
+            $('#amount').mask("#.##0,00", {reverse: true});
+
+            $("#book-form").submit(function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    url: '/api/book',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(getFormDataJson($(this))),
+                    success: function (response) {
+                        $("#message").html(`
+                            <div class="alert alert-success" role="alert">
+                                Livro cadastrado com sucesso! Redirecionando...
+                            </div>
+                        `);
+
+                        setTimeout(function () {
+                            window.location.href = "/books";
+                        }, 2000);
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Erro ao cadastrar o Livro.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        $("#message").html(`
+                            <div class="alert alert-danger" role="alert">
+                                ${errorMessage}
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

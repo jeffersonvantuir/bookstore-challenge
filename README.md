@@ -55,3 +55,11 @@ Para simplificar a implementação e utilizar o compontente no qual tenho mais d
 ```bash
 composer require symfony/twig-bundle
 ```
+
+## Front End
+Para agilizar o processo de criação do frontend, optei por utilizar o Twig em conjunto com o Bootstrap 5.
+Desta forma, o front end acaba ficando dentro do projeto Symfony, porém todas as chamadas acontecem a partir do Javascript/Jquery.
+
+Para as máscaras de valor, utilizei a biblioteca Jquery Mask (https://igorescobar.github.io/).
+
+Para as listagens, optei por utilizar o Datatables.

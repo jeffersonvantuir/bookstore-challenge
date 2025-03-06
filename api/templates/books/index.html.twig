@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Listagem de Autores{% endblock %}
+{% block title %}Listagem de Livros{% endblock %}
 
 {% block extracss %}
     <script src="{{ asset('css/dataTables.bootstrap5.css') }}"></script>
@@ -14,17 +14,17 @@
 
 {% block content %}
 
-    <h2>Lista de Autores</h2>
-    <a class="btn btn-success" href="/authors/new">Novo Autor</a>
+    <h2>Lista de Livros</h2>
+    <a class="btn btn-success" href="/books/new">Novo Livro</a>
 
     <div id="message" class="mt-2"></div>
 
-    <table id="authors-table" class="table">
+    <table id="books-table" class="table">
     </table>
 
     <script>
         $(document).ready(function() {
-            new DataTable('#authors-table', {
+            new DataTable('#books-table', {
                 ajax: function (data, callback, settings) {
                     let currentPage = (data.start / data.length) + 1;
 
@@ -35,11 +35,11 @@
                     };
 
                     if (data.search && data.search.value) {
-                        params.name = data.search.value;
+                        params.title = data.search.value;
                     }
 
                     $.ajax({
-                        url: '/api/author',
+                        url: '/api/book',
                         type: 'GET',
                         data: params,
                         success: function (response) {
@@ -53,7 +53,7 @@
                             callback(formattedData);
                         },
                         error: function (error) {
-                            console.error("Erro ao carregar os autores:", error);
+                            console.error("Erro ao carregar os livros: ", error);
                         }
                     });
                 },
@@ -62,7 +62,23 @@
                 lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
                 columns: [
                     { data: 'id', title: 'ID' },
-                    { data: 'name', title: 'Nome' },
+                    { data: 'title', title: 'Título' },
+                    { data: 'publisher', title: 'Editora' },
+                    { data: 'edition', title: 'Edição' },
+                    { data: 'publicationYear', title: 'Ano Pub.' },
+                    {
+                        data: 'amount',
+                        title: 'Valor',
+                        render: function (data, type, row) {
+                            if (type === "display" || type === "filter") {
+                                return new Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                }).format(data);
+                            }
+                            return data;
+                        }
+                    },
                     {
                         data: null,
                         title: 'Ações',
@@ -70,7 +86,7 @@
                         searchable: false,
                         render: function (data, type, row) {
                             return `
-                                <a href="/authors/edit?id=${row.id}" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="/books/edit?id=${row.id}" class="btn btn-warning btn-sm">Editar</a>
                                 <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">Excluir</button>
                             `;
                         }
@@ -79,20 +95,20 @@
             });
         });
 
-        $('#authors-table').on('click', '.delete-btn', function() {
-            let authorId = $(this).data('id');
+        $('#books-table').on('click', '.delete-btn', function() {
+            let bookId = $(this).data('id');
 
             $.ajax({
-                url: '/api/author/' + authorId,
+                url: '/api/book/' + bookId,
                 type: "DELETE",
                 success: function (response) {
                     $("#message").html(`
                             <div class="alert alert-success" role="alert">
-                                Autor excluído com sucesso!
+                                Assunto excluído com sucesso!
                             </div>
                         `);
 
-                    $('#authors-table').DataTable().ajax.reload(null, false);
+                    $('#books-table').DataTable().ajax.reload(null, false);
                 },
                 error: function (xhr) {
                     let errorMessage = "Erro ao cadastrar o autor.";
