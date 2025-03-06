@@ -1,6 +1,9 @@
 DOCKER_COMP = docker compose
 PHP_CONT = $(DOCKER_COMP) exec bookstore_php
 
+build:
+	@$(DOCKER_COMP) build
+
 down:
 	@$(DOCKER_COMP) down
 
