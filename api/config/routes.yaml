@@ -21,3 +21,21 @@ authors_edit:
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
         template: 'authors/edit.html.twig'
+
+subjects:
+    path: /subjects
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'subjects/index.html.twig'
+
+subjects_new:
+    path: /subjects/new
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'subjects/new.html.twig'
+
+subjects_edit:
+    path: /subjects/edit
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'subjects/edit.html.twig'

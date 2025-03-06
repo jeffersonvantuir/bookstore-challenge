@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/subject', name:'api_subject')]
+#[Route('/api/subject', name:'api_subject')]
 class SubjectController extends AbstractController
 {
     public function __construct(
@@ -51,6 +51,29 @@ class SubjectController extends AbstractController
                 ]
             ]
         );
+    }
+
+    #[Route('/{id}', name: '_get', methods: [Request::METHOD_GET])]
+    public function get(
+        int $id,
+    ): JsonResponse {
+        try {
+            $subject = $this->subjectService->getEntity($id);
+
+            return $this->json(
+                [
+                    'data' => [
+                        'id' => $subject->getId(),
+                        'description' => $subject->getDescription(),
+                    ],
+                ]
+            );
+        } catch (\Throwable $throwable) {
+            return $this->json(
+                ['message' => $throwable->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     #[Route('', name: '_create', methods: [Request::METHOD_POST])]

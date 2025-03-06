@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Atualizar Autor{% endblock %}
+{% block title %}Atualizar Assunto{% endblock %}
 
 {% block content %}
-    <h2>Atualizar Autor</h2>
+    <h2>Atualizar Assunto</h2>
 
     <div id="message" class="mt-2"></div>
 
-    <form id="author-form" action="" method="post">
+    <form id="subject-form" action="" method="post">
         <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" maxlength="40" class="form-control" id="name">
+            <label for="description" class="form-label">Descrição</label>
+            <input type="text" maxlength="20" class="form-control" id="description">
         </div>
         <button type="submit" class="btn btn-primary">Atualizar</button>
     </form>
@@ -20,13 +20,13 @@
             let params = new URLSearchParams(window.location.search);
 
             $.ajax({
-                url: '/api/author/' + params.get('id'),
+                url: '/api/subject/' + params.get('id'),
                 type: "GET",
                 success: function (response) {
-                   $('#name').val(response.data.name);
+                   $('#description').val(response.data.description);
                 },
                 error: function (xhr) {
-                    let errorMessage = "Erro ao buscar informações do autor.";
+                    let errorMessage = "Erro ao buscar informações do assunto.";
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
                     }
@@ -39,31 +39,31 @@
                 }
             });
 
-            $("#author-form").submit(function (event) {
+            $("#subject-form").submit(function (event) {
                 event.preventDefault();
 
                 let formData = {
-                    name: $("#name").val()
+                    description: $("#description").val()
                 };
 
                 $.ajax({
-                    url: '/api/author/' + params.get('id'),
+                    url: '/api/subject/' + params.get('id'),
                     type: "PUT",
                     contentType: "application/json",
                     data: JSON.stringify(formData),
                     success: function (response) {
                         $("#message").html(`
                             <div class="alert alert-success" role="alert">
-                                Autor atualizado com sucesso! Redirecionando...
+                                Assunto atualizado com sucesso! Redirecionando...
                             </div>
                         `);
 
                         setTimeout(function () {
-                            window.location.href = "/authors";
+                            window.location.href = "/subjects";
                         }, 2000);
                     },
                     error: function (xhr) {
-                        let errorMessage = "Erro ao atualizar o autor.";
+                        let errorMessage = "Erro ao atualizar o assunto.";
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             errorMessage = xhr.responseJSON.message;
                         }
