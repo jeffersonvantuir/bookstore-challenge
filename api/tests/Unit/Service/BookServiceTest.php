@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Service;
 
 use App\Dto\Filter\BookFilterDto;
+use App\Entity\Author;
 use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookAuthorService;
@@ -406,6 +407,143 @@ class BookServiceTest extends TestCase
             ->method('flush');
 
         $this->bookService->delete($bookId);
+    }
+
+    public function testGetWhenNotFound(): void
+    {
+        $this->bookRepository->expects(self::once())
+            ->method('find')
+            ->with(1)
+            ->willReturn(null);
+
+        self::expectException(\DomainException::class);
+        self::expectExceptionMessage('Livro não encontrado com ID 1');
+
+        $this->bookService->get(1);
+    }
+
+    public function testGetWithoutAuthorsAndSubjects(): void
+    {
+        $bookId = rand(1, 10);
+
+        $book = (new Book())
+            ->setId($bookId)
+            ->setTitle('Galinha Pintadinha')
+            ->setPublisher('ABC Editora')
+            ->setAmount(10.56)
+            ->setPublicationYear('2015')
+            ->setEdition(1);
+
+        $this->bookRepository->expects(self::once())
+            ->method('find')
+            ->with(1)
+            ->willReturn($book);
+
+        $this->bookAuthorService->expects(self::once())
+            ->method('list')
+            ->with($bookId)
+            ->willReturn([]);
+
+        $this->bookSubjectService->expects(self::once())
+            ->method('list')
+            ->with($bookId)
+            ->willReturn([]);
+
+        $expected = [
+            'id' => $bookId,
+            'title' => 'Galinha Pintadinha',
+            'amount' => 10.56,
+            'publisher' => 'ABC Editora',
+            'edition' => 1,
+            'publicationYear' => '2015',
+            'authors' => [],
+            'subjects' => [],
+        ];
+
+        $return = $this->bookService->get(1);
+        self::assertSame($expected, $return);
+    }
+
+    public function testGet(): void
+    {
+        $bookId = rand(1, 10);
+
+        $book = (new Book())
+            ->setId($bookId)
+            ->setTitle('Galinha Pintadinha')
+            ->setPublisher('ABC Editora')
+            ->setAmount(10.56)
+            ->setPublicationYear('2015')
+            ->setEdition(1);
+
+        $this->bookRepository->expects(self::once())
+            ->method('find')
+            ->with(1)
+            ->willReturn($book);
+
+        $authors = [
+            [
+                'id' => 1,
+                'name' => 'João'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Jefferson'
+            ],
+        ];
+
+        $this->bookAuthorService->expects(self::once())
+            ->method('list')
+            ->with($bookId)
+            ->willReturn($authors);
+
+        $subjects = [
+            [
+                'id' => 1,
+                'description' => 'Suspense'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Terror'
+            ],
+        ];
+
+        $this->bookSubjectService->expects(self::once())
+            ->method('list')
+            ->with($bookId)
+            ->willReturn($subjects);
+
+        $expected = [
+            'id' => $bookId,
+            'title' => 'Galinha Pintadinha',
+            'amount' => 10.56,
+            'publisher' => 'ABC Editora',
+            'edition' => 1,
+            'publicationYear' => '2015',
+            'authors' => [
+                [
+                    'id' => 1,
+                    'name' => 'João'
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Jefferson'
+                ],
+            ],
+            'subjects' => [
+                [
+                    'id' => 1,
+                    'description' => 'Suspense'
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Terror'
+                ],
+            ],
+        ];
+
+        $return = $this->bookService->get(1);
+        self::assertSame($expected, $return);
     }
 
     protected function setUp(): void
