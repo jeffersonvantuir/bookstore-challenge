@@ -63,3 +63,7 @@ Desta forma, o front end acaba ficando dentro do projeto Symfony, porém todas a
 Para as máscaras de valor, utilizei a biblioteca Jquery Mask (https://igorescobar.github.io/).
 
 Para as listagens, optei por utilizar o Datatables.
+
+## Documentação dos endpoints
+
+https://documenter.getpostman.com/view/5001304/2sAYdmmo2g

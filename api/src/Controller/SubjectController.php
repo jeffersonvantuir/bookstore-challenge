@@ -13,12 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api/subject', name:'api_subject')]
 class SubjectController extends AbstractController
 {
+    use EmptyContentValidatorTrait;
+
     public function __construct(
         private readonly SubjectService $subjectService,
     ) {
@@ -29,7 +30,6 @@ class SubjectController extends AbstractController
         Request $request,
         PaginatorInterface $paginator
     ): JsonResponse {
-
         $filterDto = (new SubjectFilterDto($request->query->get('description')));
 
         $list = $this->subjectService->list($filterDto);
@@ -81,9 +81,7 @@ class SubjectController extends AbstractController
         Request $request,
     ): JsonResponse {
         try {
-            if ('' === $request->getContent()) {
-                throw new BadRequestHttpException('Nenhum dado foi enviado na requisição.');
-            }
+            $this->validateRequest($request);
 
             $data = $request->toArray();
 
@@ -109,9 +107,7 @@ class SubjectController extends AbstractController
         int $id
     ): JsonResponse {
         try {
-            if ('' === $request->getContent()) {
-                throw new BadRequestHttpException('Nenhum dado foi enviado na requisição.');
-            }
+            $this->validateRequest($request);
 
             $data = $request->toArray();
 

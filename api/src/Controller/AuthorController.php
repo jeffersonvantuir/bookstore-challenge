@@ -13,12 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api/author', name:'api_author')]
 class AuthorController extends AbstractController
 {
+    use EmptyContentValidatorTrait;
+
     public function __construct(
         private readonly AuthorService $authorService,
     ) {
@@ -80,9 +81,7 @@ class AuthorController extends AbstractController
         Request $request,
     ): JsonResponse {
         try {
-            if ('' === $request->getContent()) {
-                throw new BadRequestHttpException('Nenhum dado foi enviado na requisição.');
-            }
+            $this->validateRequest($request);
 
             $data = $request->toArray();
 
@@ -108,9 +107,7 @@ class AuthorController extends AbstractController
         int $id
     ): JsonResponse {
         try {
-            if ('' === $request->getContent()) {
-                throw new BadRequestHttpException('Nenhum dado foi enviado na requisição.');
-            }
+            $this->validateRequest($request);
 
             $data = $request->toArray();
 

@@ -34,6 +34,48 @@ class ReportServiceTest extends TestCase
         $this->reportService->byAuthors();
     }
 
+    public function testReportWhenBookDataIsEmpty(): void
+    {
+        $viewReport1 = (new ViewReportAuthor())
+            ->setId(1)
+            ->setAuthorId(1)
+            ->setAuthorName('Jefferson')
+            ->setPublisher('Editora')
+            ->setEdition(1)
+            ->setPublicationYear('2024')
+            ->setAmount(0)
+            ->setBookTitle('Três porquinhos')
+            ->setBookId(null)
+            ->setSubjects(null);
+
+        $returnAuthors = [
+            $viewReport1,
+        ];
+
+        $this->reportAuthorRepository->expects(self::once())
+            ->method('findAll')
+            ->willReturn($returnAuthors);
+
+        $expected = [
+            1 => [
+                'authorId' => 1,
+                'authorName' => 'Jefferson',
+                'books' => []
+            ],
+        ];
+
+        $this->twig->expects(self::once())
+            ->method('render')
+            ->with(
+                'report/authors.html.twig',
+                [
+                    'authors' => $expected,
+                ]
+            );
+
+        $this->reportService->byAuthors();
+    }
+
     public function testReportByAuthor(): void
     {
         $viewReport1 = (new ViewReportAuthor())
