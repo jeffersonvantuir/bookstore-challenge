@@ -43,3 +43,15 @@ Algumas validações foram feitas de forma manual via PHP, utilizando `empty` e 
 ```bash
 composer require symfony/validator
 ```
+
+### Relatório
+Para geração do relatório, utilizei o componente Snappy, utilizado comumente em conjunto com o Symfony.
+```bash
+composer require knplabs/knp-snappy-bundle
+```
+
+Para simplificar a implementação e utilizar o compontente no qual tenho mais domínio, optei por utilizar a renderização do Twig do próprio Symfony. Para isso, tive que instalar as dependências abaixo.
+
+```bash
+composer require symfony/twig-bundle
+```

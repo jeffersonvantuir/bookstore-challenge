@@ -18,7 +18,10 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
     wget \
     zip \
     unzip \
+    xvfb \
+    wkhtmltopdf \
     libssl-dev && \
+    if [ ! -f /usr/local/bin/wkhtmltopdf ]; then ln -s /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf ; fi && \
     install-php-extensions \
     sockets \
     intl \
