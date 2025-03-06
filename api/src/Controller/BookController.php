@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/book', name:'api_book')]
+#[Route('/api/book', name:'api_book')]
 class BookController extends AbstractController
 {
     public function __construct(
@@ -59,6 +59,22 @@ class BookController extends AbstractController
                 ]
             ]
         );
+    }
+
+    #[Route('/{id}', name: '_get', methods: [Request::METHOD_GET])]
+    public function get(
+        int $id,
+    ): JsonResponse {
+        try {
+            return $this->json(
+                ['data' => $this->bookService->get($id)]
+            );
+        } catch (\Throwable $exception) {
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     #[Route('', name: '_create', methods: [Request::METHOD_POST])]

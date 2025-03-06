@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cadastrar Assunto{% endblock %}
+
+{% block content %}
+    <h2>Cadastrar Assunto</h2>
+
+    <div id="message"></div>
+
+    <form id="subject-form" action="" method="post">
+        <div class="mb-3">
+            <label for="description" class="form-label">Descrição</label>
+            <input type="text" maxlength="20" class="form-control" id="description">
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            $("#subject-form").submit(function (event) {
+                event.preventDefault();
+
+                let formData = {
+                    description: $("#description").val()
+                };
+
+                $.ajax({
+                    url: '/api/subject',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        $("#message").html(`
+                            <div class="alert alert-success" role="alert">
+                                Assunto cadastrado com sucesso! Redirecionando...
+                            </div>
+                        `);
+
+                        setTimeout(function () {
+                            window.location.href = "/subjects";
+                        }, 2000);
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Erro ao cadastrar o autor.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        $("#message").html(`
+                            <div class="alert alert-danger" role="alert">
+                                ${errorMessage}
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

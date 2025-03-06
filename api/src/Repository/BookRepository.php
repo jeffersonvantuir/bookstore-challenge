@@ -32,7 +32,7 @@ class BookRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('book');
 
-        $query = $queryBuilder->select('book.id, book.title, book.publisher, book.edition, book.publicationYear')
+        $query = $queryBuilder->select('book.id, book.title, book.publisher, book.edition, book.publicationYear, book.amount')
             ->distinct()
             ->leftJoin(BookAuthor::class, 'bookAuthor', Join::WITH, 'bookAuthor.book = book.id')
             ->leftJoin(Author::class, 'author', Join::WITH, 'author.id = bookAuthor.author')

@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listagem de Autores{% endblock %}
+
+{% block extracss %}
+    <script src="{{ asset('css/dataTables.bootstrap5.css') }}"></script>
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{{ asset('js/dataTables.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.bootstrap5.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <h2>Lista de Autores</h2>
+    <div class="row d-flex justify-content-end mb-4">
+        <a class="btn btn-success col-sm-12 col-md-3 col-lg-2" href="/authors/new">Novo Autor</a>
+    </div>
+
+    <div id="message" class="mt-2"></div>
+
+    <table id="authors-table" class="table">
+    </table>
+
+    <script>
+        $(document).ready(function() {
+            new DataTable('#authors-table', {
+                ajax: function (data, callback, settings) {
+                    let currentPage = (data.start / data.length) + 1;
+
+                    let params = {
+                        draw: data.draw,
+                        page: currentPage,
+                        limit: data.length,
+                    };
+
+                    if (data.search && data.search.value) {
+                        params.name = data.search.value;
+                    }
+
+                    $.ajax({
+                        url: '/api/author',
+                        type: 'GET',
+                        data: params,
+                        success: function (response) {
+                            let formattedData = {
+                                draw: data.draw || 1,
+                                recordsTotal: response.pagination.total,
+                                recordsFiltered: response.pagination.total,
+                                data: response.data
+                            };
+
+                            callback(formattedData);
+                        },
+                        error: function (error) {
+                            console.error("Erro ao carregar os autores:", error);
+                        }
+                    });
+                },
+                processing: true,
+                serverSide: true,
+                lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                columns: [
+                    { data: 'id', title: 'ID' },
+                    { data: 'name', title: 'Nome' },
+                    {
+                        data: null,
+                        title: 'Ações',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return `
+                                <a href="/authors/edit?id=${row.id}" class="btn btn-warning btn-sm">Editar</a>
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">Excluir</button>
+                            `;
+                        }
+                    }
+                ]
+            });
+        });
+
+        $('#authors-table').on('click', '.delete-btn', function() {
+            let authorId = $(this).data('id');
+
+            $.ajax({
+                url: '/api/author/' + authorId,
+                type: "DELETE",
+                success: function (response) {
+                    $("#message").html(`
+                            <div class="alert alert-success" role="alert">
+                                Autor excluído com sucesso!
+                            </div>
+                        `);
+
+                    $('#authors-table').DataTable().ajax.reload(null, false);
+                },
+                error: function (xhr) {
+                    let errorMessage = "Erro ao cadastrar o autor.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+
+                    $("#message").html(`
+                        <div class="alert alert-danger" role="alert">
+                            ${errorMessage}
+                        </div>
+                    `);
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -91,6 +91,25 @@ readonly class BookService
         $this->entityManager->flush();
     }
 
+    public function get(int $id): array
+    {
+        $book = $this->getEntity($id);
+
+        $authors = $this->bookAuthorService->list($book->getId());
+        $subjects = $this->bookSubjectService->list($book->getId());
+
+        return [
+            'id' => $book->getId(),
+            'title' => $book->getTitle(),
+            'amount' => $book->getAmount(),
+            'publisher' => $book->getPublisher(),
+            'edition' => $book->getEdition(),
+            'publicationYear' => $book->getPublicationYear(),
+            'authors' => $authors,
+            'subjects' => $subjects,
+        ];
+    }
+
     private function getEntity(int $id): Book
     {
         $book = $this->bookRepository->find($id);

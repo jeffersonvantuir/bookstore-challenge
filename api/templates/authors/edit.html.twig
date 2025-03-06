@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Atualizar Autor{% endblock %}
+
+{% block content %}
+    <h2>Atualizar Autor</h2>
+
+    <div id="message" class="mt-2"></div>
+
+    <form id="author-form" action="" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" maxlength="40" class="form-control" id="name">
+        </div>
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            let params = new URLSearchParams(window.location.search);
+
+            $.ajax({
+                url: '/api/author/' + params.get('id'),
+                type: "GET",
+                success: function (response) {
+                   $('#name').val(response.data.name);
+                },
+                error: function (xhr) {
+                    let errorMessage = "Erro ao buscar informações do autor.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+
+                    $("#message").html(`
+                            <div class="alert alert-danger" role="alert">
+                                ${errorMessage}
+                            </div>
+                        `);
+                }
+            });
+
+            $("#author-form").submit(function (event) {
+                event.preventDefault();
+
+                let formData = {
+                    name: $("#name").val()
+                };
+
+                $.ajax({
+                    url: '/api/author/' + params.get('id'),
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        $("#message").html(`
+                            <div class="alert alert-success" role="alert">
+                                Autor atualizado com sucesso! Redirecionando...
+                            </div>
+                        `);
+
+                        setTimeout(function () {
+                            window.location.href = "/authors";
+                        }, 2000);
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Erro ao atualizar o autor.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        $("#message").html(`
+                            <div class="alert alert-danger" role="alert">
+                                ${errorMessage}
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

@@ -3,3 +3,64 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+home_redirect:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: authors
+        permanent: true
+
+authors:
+    path: /authors
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'authors/index.html.twig'
+
+authors_new:
+    path: /authors/new
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'authors/new.html.twig'
+
+authors_edit:
+    path: /authors/edit
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'authors/edit.html.twig'
+
+subjects:
+    path: /subjects
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'subjects/index.html.twig'
+
+subjects_new:
+    path: /subjects/new
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'subjects/new.html.twig'
+
+subjects_edit:
+    path: /subjects/edit
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'subjects/edit.html.twig'
+
+books:
+    path: /books
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'books/index.html.twig'
+
+books_new:
+    path: /books/new
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'books/new.html.twig'
+
+books_edit:
+    path: /books/edit
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: 'books/edit.html.twig'
