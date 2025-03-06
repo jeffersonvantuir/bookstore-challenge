@@ -91,6 +91,9 @@ readonly class BookService
         $this->entityManager->flush();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function get(int $id): array
     {
         $book = $this->getEntity($id);

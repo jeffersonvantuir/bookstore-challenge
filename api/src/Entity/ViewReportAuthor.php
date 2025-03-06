@@ -45,6 +45,11 @@ class ViewReportAuthor
     #[ORM\Column(name: 'subjects')]
     private ?string $subjects = null;
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function getAuthorId(): int
     {
         return $this->authorId;

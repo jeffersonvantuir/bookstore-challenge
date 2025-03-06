@@ -48,6 +48,9 @@ class ReportService
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getBookData(ViewReportAuthor $reportAuthor): array
     {
         if (null === $reportAuthor->getBookId()) {
