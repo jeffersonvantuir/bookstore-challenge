@@ -14,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api/book', name:'api_book')]
@@ -33,34 +32,46 @@ class BookController extends AbstractController
         Request $request,
         PaginatorInterface $paginator
     ): JsonResponse {
-        $filterDto = new BookFilterDto(
-            $request->query->get('title'),
-            $request->query->get('publisher'),
-            $request->query->get('edition'),
-            $request->query->get('publicationYear'),
-            $request->query->get('authorName'),
-            $request->query->get('subjectDescription'),
-        );
+        try {
+            $filterDto = new BookFilterDto(
+                $request->query->get('title'),
+                $request->query->get('publisher'),
+                $request->query->get('edition'),
+                $request->query->get('publicationYear'),
+                $request->query->get('authorName'),
+                $request->query->get('subjectDescription'),
+            );
 
-        $list = $this->bookService->list($filterDto);
+            $list = $this->bookService->list($filterDto);
 
-        $pagination = $paginator->paginate(
-            $list,
-            $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 10)
-        );
+            $pagination = $paginator->paginate(
+                $list,
+                $request->query->getInt('page', 1),
+                $request->query->getInt('limit', 10)
+            );
 
-        return $this->json(
-            [
-                'data' => $pagination->getItems(),
-                'pagination' => [
-                    'page' => $pagination->getCurrentPageNumber(),
-                    'limit' => $pagination->getItemNumberPerPage(),
-                    'total' => $pagination->getTotalItemCount(),
-                    'pages' => ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage()),
+            return $this->json(
+                [
+                    'data' => $pagination->getItems(),
+                    'pagination' => [
+                        'page' => $pagination->getCurrentPageNumber(),
+                        'limit' => $pagination->getItemNumberPerPage(),
+                        'total' => $pagination->getTotalItemCount(),
+                        'pages' => ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage()),
+                    ]
                 ]
-            ]
-        );
+            );
+        } catch (\DomainException $exception) {
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
+        } catch (\Throwable $throwable) {
+            return $this->json(
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     #[Route('/{id}', name: '_get', methods: [Request::METHOD_GET])]
@@ -71,10 +82,15 @@ class BookController extends AbstractController
             return $this->json(
                 ['data' => $this->bookService->get($id)]
             );
-        } catch (\Throwable $exception) {
+        } catch (\DomainException $exception) {
             return $this->json(
                 ['message' => $exception->getMessage()],
                 Response::HTTP_BAD_REQUEST
+            );
+        } catch (\Throwable $throwable) {
+            return $this->json(
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -106,12 +122,19 @@ class BookController extends AbstractController
                 ['message' => 'Livro criado com sucesso.'],
                 Response::HTTP_CREATED
             );
+        } catch (\DomainException $exception) {
+            $this->entityManager->rollback();
+
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (\Throwable $throwable) {
             $this->entityManager->rollback();
 
             return $this->json(
-                ['message' => $throwable->getMessage()],
-                Response::HTTP_BAD_REQUEST
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -145,12 +168,19 @@ class BookController extends AbstractController
                 ['message' => 'Livro atualizado com sucesso.'],
                 Response::HTTP_OK
             );
+        } catch (\DomainException $exception) {
+            $this->entityManager->rollback();
+
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (\Throwable $throwable) {
             $this->entityManager->rollback();
 
             return $this->json(
-                ['message' => $throwable->getMessage()],
-                Response::HTTP_BAD_REQUEST
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -168,12 +198,19 @@ class BookController extends AbstractController
                 ['message' => 'Livro excluído com sucesso.'],
                 Response::HTTP_OK
             );
+        } catch (\DomainException $exception) {
+            $this->entityManager->rollback();
+
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (\Throwable $throwable) {
             $this->entityManager->rollback();
 
             return $this->json(
-                ['message' => $throwable->getMessage()],
-                Response::HTTP_BAD_REQUEST
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }

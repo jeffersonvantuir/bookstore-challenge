@@ -31,10 +31,15 @@ class ReportController extends AbstractController
                 $pdf->getOutputFromHtml($html),
                 sprintf('report_author_%s.pdf', date('YmdHis'))
             );
-        } catch (\Throwable $exception) {
+        } catch (\DomainException $exception) {
             return $this->json(
                 ['message' => $exception->getMessage()],
                 Response::HTTP_BAD_REQUEST
+            );
+        } catch (\Throwable $throwable) {
+            return $this->json(
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
