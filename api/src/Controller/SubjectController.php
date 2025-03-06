@@ -30,27 +30,40 @@ class SubjectController extends AbstractController
         Request $request,
         PaginatorInterface $paginator
     ): JsonResponse {
-        $filterDto = (new SubjectFilterDto($request->query->get('description')));
+        try {
+            $filterDto = (new SubjectFilterDto($request->query->get('description')));
 
-        $list = $this->subjectService->list($filterDto);
+            $list = $this->subjectService->list($filterDto);
 
-        $pagination = $paginator->paginate(
-            $list,
-            $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 10)
-        );
+            $pagination = $paginator->paginate(
+                $list,
+                $request->query->getInt('page', 1),
+                $request->query->getInt('limit', 10)
+            );
 
-        return $this->json(
-            [
-                'data' => $pagination->getItems(),
-                'pagination' => [
-                    'page' => $pagination->getCurrentPageNumber(),
-                    'limit' => $pagination->getItemNumberPerPage(),
-                    'total' => $pagination->getTotalItemCount(),
-                    'pages' => ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage()),
+            return $this->json(
+                [
+                    'data' => $pagination->getItems(),
+                    'pagination' => [
+                        'page' => $pagination->getCurrentPageNumber(),
+                        'limit' => $pagination->getItemNumberPerPage(),
+                        'total' => $pagination->getTotalItemCount(),
+                        'pages' => ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage()),
+                    ]
                 ]
-            ]
-        );
+            );
+
+        } catch (\DomainException $exception) {
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
+        } catch (\Throwable $throwable) {
+            return $this->json(
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     #[Route('/{id}', name: '_get', methods: [Request::METHOD_GET])]
@@ -68,10 +81,15 @@ class SubjectController extends AbstractController
                     ],
                 ]
             );
+        } catch (\DomainException $exception) {
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (\Throwable $throwable) {
             return $this->json(
-                ['message' => $throwable->getMessage()],
-                Response::HTTP_BAD_REQUEST
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -93,10 +111,15 @@ class SubjectController extends AbstractController
                 ['message' => 'Assunto criado com sucesso.'],
                 Response::HTTP_CREATED
             );
+        } catch (\DomainException $exception) {
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (\Throwable $throwable) {
             return $this->json(
-                ['message' => $throwable->getMessage()],
-                Response::HTTP_BAD_REQUEST
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -119,10 +142,15 @@ class SubjectController extends AbstractController
                 ['message' => 'Assunto atualizado com sucesso.'],
                 Response::HTTP_OK
             );
+        } catch (\DomainException $exception) {
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (\Throwable $throwable) {
             return $this->json(
-                ['message' => $throwable->getMessage()],
-                Response::HTTP_BAD_REQUEST
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -138,10 +166,15 @@ class SubjectController extends AbstractController
                 ['message' => 'Assunto excluído com sucesso.'],
                 Response::HTTP_OK
             );
+        } catch (\DomainException $exception) {
+            return $this->json(
+                ['message' => $exception->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
         } catch (\Throwable $throwable) {
             return $this->json(
-                ['message' => $throwable->getMessage()],
-                Response::HTTP_BAD_REQUEST
+                ['message' => 'Ocorreu um erro não mapeado na aplicação.'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
